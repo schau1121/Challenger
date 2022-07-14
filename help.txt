@@ -1,0 +1,1 @@
+https://stackoverflow.com/questions/15871391/implementing-flask-login-with-multiple-user-classes
