@@ -1,7 +1,6 @@
+from re import sub
 from sqlalchemy import null
 from db import db
-from models.challenge import ChallengeModel
-from models.users import UserModel
 
 # Submission form contains:
 # - name
@@ -13,21 +12,24 @@ from models.users import UserModel
 class SubmissionModel(db.Model):
     __tablename__ = 'submissions'
 
-    submission_id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True)
+    submission_id = db.Column(db.String(255), nullable=False)
     name = db.Column(db.String(255), nullable=False)
-    user_id = db, db.Column(db.Integer, db.ForeignKey("users.id"))
-    user = db.relationship("UserModel")
+    student_id = db, db.Column(db.Integer, db.ForeignKey("student-users.id"))
+    student = db.relationship("StudentUserModel", back_populates="submissions")
     github_repo_url = db.Column(db.String(255))
     google_drive_url = db.Column(db.String(255))
-    challenge_id = db.Column(db.Integer, db.ForeignKey("challenges.id"))
+    challenge_id = db.Column(
+        db.String(255), db.ForeignKey("challenges.challenge_id"))
     challenge = db.relationship("ChallengeModel")
 
-    def __init__(self, name, user_id, github_repo_url, google_drive_url, challenge_id):
+    def __init__(self, name, user_id, github_repo_url, google_drive_url, challenge_id, submission_id):
         self.name = name
         self.user_id = user_id
         self.github_repo_url = github_repo_url
         self.google_drive_url = google_drive_url
         self.challenge_id = challenge_id
+        self.submission_id = submission_id
 
     def json(self):
         return {

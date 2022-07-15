@@ -1,8 +1,6 @@
 from datetime import datetime
 from sqlalchemy import desc, null
 from db import db
-from models.users import UserModel
-from models.submission import SubmissionModel
 
 # challenge form contains:
 # - challenge-name
@@ -10,27 +8,34 @@ from models.submission import SubmissionModel
 # - submission instructions
 # - date created
 # - submissions submitted
+# - (company_name passed into post)
 
 
 class ChallengeModel(db.Model):
     __tablename__ = 'challenges'
-
-    challenge_id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True)
+    challenge_id = db.Column(db.Integer)
     challenge_name = db.Column(db.String(255))
     description = db.Column(db.String(1000))
     submission_instructions = db.Column(db.String(1000))
     date_created = db.Column(db.Date())
-    submissions = db.Relationship("SubmissionModel", lazy=True)
+    company_id = db.Column(
+        db.Integer, db.ForeignKey("company-users.id")
+    )
+    company = db.relationship("CompanyUserModel", lazy=True)
+    submissions = db.relationship("SubmissionModel", lazy=True)
 
-    def __init__(self, challenge_name, description, submission_instructions):
+    def __init__(self, challenge_name, description, submission_instructions, challenge_id):
         self.challenge_name = challenge_name
         self.description = description
         self.submission_instructions = submission_instructions
         self.date_created = datetime.date.today()
+        self.challenge_id = challenge_id
 
     def json(self):
         return {
             "challenge_name": self.challenge_name,
+            "challenge_id": self.challenge_id,
             "description": self.description,
             "submission_instructions": self.submission_instructions,
             "date_created": self.date_created,
