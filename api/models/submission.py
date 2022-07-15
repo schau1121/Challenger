@@ -15,8 +15,8 @@ class SubmissionModel(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     submission_id = db.Column(db.String(255), nullable=False)
     name = db.Column(db.String(255), nullable=False)
-    student_id = db, db.Column(db.Integer, db.ForeignKey("student-users.id"))
-    student = db.relationship("StudentUserModel", back_populates="submissions")
+    user_id = db.Column(db.Integer, db.ForeignKey("student-users.id"))
+    student = db.relationship("StudentUserModel")
     github_repo_url = db.Column(db.String(255))
     google_drive_url = db.Column(db.String(255))
     challenge_id = db.Column(

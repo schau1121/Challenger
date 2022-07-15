@@ -26,7 +26,7 @@ class Challenge(Resource):
             }
         data = Challenge.parser.parse_args()
         challenge = ChallengeModel(
-            data["challenge_name"], data["challenge_description"], data["submission_instructions"], challenge_id)
+            data["challenge_name"], data["description"], data["submission_instructions"], challenge_id, data["company_id"])
         challenge.save_to_db()
 
         return {

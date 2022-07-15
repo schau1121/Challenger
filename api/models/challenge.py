@@ -1,4 +1,5 @@
 from datetime import datetime
+from turtle import back
 from sqlalchemy import desc, null
 from db import db
 
@@ -22,15 +23,17 @@ class ChallengeModel(db.Model):
     company_id = db.Column(
         db.Integer, db.ForeignKey("company-users.id")
     )
-    company = db.relationship("CompanyUserModel", lazy=True)
+    company = db.relationship(
+        "CompanyUserModel", lazy=True, back_populates="company_challenges")
     submissions = db.relationship("SubmissionModel", lazy=True)
 
-    def __init__(self, challenge_name, description, submission_instructions, challenge_id):
+    def __init__(self, challenge_name, description, submission_instructions, challenge_id, company_id):
         self.challenge_name = challenge_name
         self.description = description
         self.submission_instructions = submission_instructions
-        self.date_created = datetime.date.today()
+        self.date_created = datetime.today()
         self.challenge_id = challenge_id
+        self.company_id = company_id
 
     def json(self):
         return {
@@ -38,7 +41,7 @@ class ChallengeModel(db.Model):
             "challenge_id": self.challenge_id,
             "description": self.description,
             "submission_instructions": self.submission_instructions,
-            "date_created": self.date_created,
+            "date_created": str(self.date_created),
             "submissions": [submission.json() for submission in self.submissions]
         }
 
