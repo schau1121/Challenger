@@ -4,8 +4,8 @@ from models.users import StudentUserModel, CompanyUserModel
 
 class StudentUser(Resource):
     parser = reqparse.RequestParser()
-    parser.add_argument("starred_challenge_id_add", type=int)
-    parser.add_argument("starred_challenge_id_remove", type=int)
+    parser.add_argument("starred_challenge_id_add", type=str)
+    parser.add_argument("starred_challenge_id_remove", type=str)
     parser.add_argument("email", type=str)
 
     def get(self, username):
@@ -21,16 +21,20 @@ class StudentUser(Resource):
         data = StudentUser.parser.parse_args()
         user = StudentUserModel.find_by_username(username)
         if user:
-            if data["starred_challenge_id_add"] != "":
+            if data["starred_challenge_id_add"] != None:
                 user.starred_challenge_ids.append(
                     data["starred_challenge_id_add"])
-            if data["starred_challenge_id_remove"] != "":
+            if data["starred_challenge_id_remove"] != None:
                 user.starred_challenge_ids.remove(
                     data["starred_challenge_id_remove"])
-            if data["email"] != "":
+            if data["email"] != None:
                 user.email = data["email"]
 
             user.save_to_db()
+
+            return {
+                "message": "Sucess!"
+            }
         else:
             return {
                 "message": "User not found"
