@@ -37,7 +37,8 @@ class SubmissionModel(db.Model):
             'user_id': self.user_id,
             'github_repo_url': self.github_repo_url,
             'google_drive_url': self.google_drive_url,
-            'challenge_id': self.challenge_id
+            'challenge_id': self.challenge_id,
+            'submission_id': self.submission_id
         }
 
     def save_to_db(self):

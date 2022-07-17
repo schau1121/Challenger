@@ -59,6 +59,8 @@ class CompanyUserModel(db.Model):
     def json(self):
         return {
             "id": self.id,
+            "username": self.username,
+            "password": self.password,
             "company_name": self.company_name,
             "company_description": self.company_description,
             "company_challenges": [challenge.json() for challenge in self.company_challenges]

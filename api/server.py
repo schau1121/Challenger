@@ -18,8 +18,8 @@ def create_tables():
     db.create_all()
 
 
-api.add_resource(StudentUser, "/api/students/user/<string:username>")
-api.add_resource(CompanyUser, "/api/companies/user/<string:company_name>")
+api.add_resource(StudentUser, "/api/students/<string:username>")
+api.add_resource(CompanyUser, "/api/companies/<string:company_name>")
 api.add_resource(UserRegister, "/api/register")
 api.add_resource(Challenge, "/api/challenge/<string:challenge_id>")
 api.add_resource(ChallengeList, "/api/challenges")
