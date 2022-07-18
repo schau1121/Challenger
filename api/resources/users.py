@@ -76,7 +76,7 @@ class UserRegister(Resource):
     parser.add_argument("username", type=str, required=True)
     parser.add_argument("password", type=str, required=True)
     parser.add_argument("role", type=str, required=True)
-    parser.add_argument("company_name", type=str)
+    parser.add_argument("company_name", type=str, required=True)
     parser.add_argument("company_description", type=str)
     parser.add_argument("email", type=str)
 

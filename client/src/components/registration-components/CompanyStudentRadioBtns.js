@@ -13,6 +13,7 @@ export default function CompanyStudentRadioBtns(props) {
         aria-labelledby="demo-controlled-radio-buttons-group"
         name="controlled-radio-buttons-group"
         onChange={props.handler}
+        defaultValue="true"
       >
         <FormControlLabel value="true" control={<Radio />} label="Student" />
         <FormControlLabel value="false" control={<Radio />} label="Company" />
