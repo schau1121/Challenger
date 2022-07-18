@@ -1,11 +1,10 @@
 import React, { useState } from 'react'
 import Box from '@mui/material/Box';
-import Stepper from '@mui/material/Stepper';
-import Step from '@mui/material/Step';
-import StepLabel from '@mui/material/StepLabel';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import { useNavigate } from 'react-router-dom'
+import CompanyStudentRadioBtns from './registration-components/CompanyStudentRadioBtns';
+import RegistrationHeader from './registration-components/RegistrationHeader';
 
 /*
 https://javascript.plainenglish.io/multi-step-form-using-react-and-material-ui-29ff7f7cf049
@@ -14,11 +13,11 @@ render separate components for each stage of the form
 */
 
 const steps = ["Company or Student?", "Register", "Confirm Details"]
-let isStudent = false
 
 export default function RegisterForm() {
     const navigate = useNavigate()
     const [activeStep, setActiveStep] = useState(0)
+    const [isStudent, setIsStudent] = useState("true")
     
     const handleNext = () => {
         setActiveStep((prevActiveStep) => prevActiveStep + 1);
@@ -40,28 +39,22 @@ export default function RegisterForm() {
         
     }
 
+    const handleIsStudent = (e) => {
+        //console.log(e.target.value)
+        setIsStudent(e.target.value)
+        isStudent === "true" ? (user["role"] = "student") : (user["role"] = "company")
+    }
+
     let user = {
         "username": "",
         "password": "",
         "role": ""
     }
 
-    return (
-        <Box sx={{ padding: 4 }}>
-            <h2>Register for an account!</h2>
-            <Stepper activeStep={activeStep} sx={{ marginTop: 3 }}>
-                {steps.map((label, index) => {
-                    const stepProps = {}
-                    const labelProps = {}
-                    return (
-                        <Step key={label} {...stepProps}>
-                            <StepLabel {...labelProps}>{label}</StepLabel>
-                        </Step>
-                    );
-                })}
-            </Stepper>
-
-            {activeStep === steps.length ? (
+    if(activeStep === steps.length) {
+        return (
+            <Box sx={{ padding: 4 }}>
+                <RegistrationHeader activeStep={activeStep} steps={steps} />
                 <React.Fragment>
                     <Typography sx={{ mt:2, mb:1 }}>
                         All steps completed
@@ -71,9 +64,15 @@ export default function RegisterForm() {
                         <Button onClick={handleLogin}>Login</Button>
                     </Box>
                 </React.Fragment>
-            ) :(
+            </Box>
+        )
+    } else if (activeStep === 0) {
+        return (
+            <Box sx={{ padding: 4 }}>
+                <RegistrationHeader activeStep={activeStep} steps={steps} />
                 <React.Fragment>
-                    <Typography sx={{ mt: 2, mb: 1 }}>Step {activeStep + 1}</Typography>
+                    <Typography sx={{ mt: 2, mb: 2 }}>Step {activeStep + 1}</Typography>
+                    <CompanyStudentRadioBtns handler={handleIsStudent}/>
                     <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
                         <Button
                             color="inherit"
@@ -89,7 +88,11 @@ export default function RegisterForm() {
                         </Button>
                     </Box>
                 </React.Fragment>
-            )}
-        </Box>
-    )
+            </Box>
+        )
+    } else if (activeStep === 1) {
+        //return student or company registration form based on isStudent
+    } else {
+        //return student or company registration form with text fields disabled to confirm
+    }
 }
